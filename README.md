@@ -6,6 +6,9 @@ Riak client for node.js
 This is the client that we use at Voxer.  It's been tested very thoroughly in our environment and for our usage patterns, but
 there may be glaring holes in functionality that we don't use.
 
+It uses the "poolee" module to do load balancing and failure detection so you don't necessarily need a load balancer between node
+and Riak.
+
 ## Example
 
 There is no documentation yet, and there is only one example.  This is the best thing to look at for now.  You can run it, and you should see something like this:
