@@ -6,6 +6,25 @@ Riak client for node.js
 This is the client that we use at Voxer.  It's been tested very thoroughly in our environment and for our usage patterns, but
 there may be glaring holes in functionality that we don't use.
 
+## Example
+
+There is no documentation yet, and there is only one example.  This is the best thing to look at for now.  You can run it, and you should see something like this:
+
+    ranney-imac:~/work/node_riak (master)$ curl -X DELETE localhost:8098/riak/bucket_1/key_1
+    ranney-imac:~/work/node_riak (master)$ node example.js 
+    metric: counter, riak_retry_filter|404_GET=1
+    metric: histogram, LB_Pool_pool_name|GET|bucket_1=51
+    metric: histogram, LB_Pool_pool_name|PUT|bucket_1=7
+    204:  { counter: 1 }
+    ranney-imac:~/work/node_riak (master)$ node example.js 
+    metric: histogram, LB_Pool_pool_name|GET|bucket_1=9
+    metric: histogram, LB_Pool_pool_name|PUT|bucket_1=5
+    204:  { counter: 2 }
+    ranney-imac:~/work/node_riak (master)$ node example.js 
+    metric: histogram, LB_Pool_pool_name|GET|bucket_1=9
+    metric: histogram, LB_Pool_pool_name|PUT|bucket_1=4
+    204:  { counter: 3 }
+
 ## LICENSE - "MIT License"
 
 Copyright (c) 2012 Matthew Ranney, http://ranney.com/
