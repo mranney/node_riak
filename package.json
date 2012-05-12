@@ -1,6 +1,6 @@
 {
     "name": "riak",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Riak client",
     "homepage": "http://github.com/mranney/node_riak",
     "author": "Matt Ranney <mjr@ranney.com>",
