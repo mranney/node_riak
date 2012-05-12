@@ -73,6 +73,18 @@ function RiakClient(node_list, client_id, pool_name) {
 }
 require("util").inherits(RiakClient, events.EventEmitter);
 
+RiakClient.prototype.log = function (op, str) {
+    console.log(op + " " + str);
+};
+
+RiakClient.prototype.warn = function (op, str) {
+    console.error(op + " " + str);
+};
+
+RiakClient.prototype.error = function (op, str) {
+    console.error(op + " " + str);
+};
+
 RiakClient.prototype.histogram = function (key, val) {
     this.emit("metrics", "histogram", key, val);
 };
@@ -183,7 +195,7 @@ function parse_multipart(res, str) {
 
 // Supported options and their default values
 // {
-//     r_val: <number> // default n-1
+//     r_val: <number> // default is whatever Riak's default is, usually basic quorum
 //     retry: <bool>   // default = true, will retry gets with exponential backoff when recieving a 404
 //     parse: <bool>   // default = true, will parse riak response assuming it is json
 //     resolver: <fn>  // no default = used to resolve sibling values
@@ -219,7 +231,7 @@ function RiakRequest(client, bucket, key, options, callback) {
     }
 
     if (this.debug_mode) {
-        this.log("riak request", this.method + " " + this.bk_str + " options: " + JSON.stringify(this.options));
+        this.client.log("riak request", this.method + " " + this.bk_str + " options: " + JSON.stringify(this.options));
     }
 
     if (this.options.body && this.should_parse) {
@@ -232,7 +244,7 @@ function RiakRequest(client, bucket, key, options, callback) {
 // wrapper for main callback to make sure it only gets called once
 RiakRequest.prototype.callback = function (err, res, obj) {
     if (this.callback_called) {
-        this.warn("riak callback dup", "already called callback for " + this.bk_str);
+        this.client.warn("riak callback dup", "already called callback for " + this.bk_str);
     } else {
         this.callback_called = true;
         this.callback_fn(err, res, obj);
@@ -339,7 +351,7 @@ RiakRequest.prototype.on_response = function (err, res, body) {
     }
 
     if (this.should_parse) {
-        if (res.statusCode !== 200) { // Riak errors are just text, so we make JSON out of them
+        if (res.statusCode !== 200) { // Riak errors are just text, so we make an Object out of them
             body = {body: body, statusCode: res.statusCode};
         } else {
             try {

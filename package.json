@@ -1,14 +1,16 @@
 {
     "name": "riak",
-    "version": "1.0",
+    "version": "1.0.1",
     "description": "Riak client",
     "homepage": "http://github.com/mranney/node_riak",
     "author": "Matt Ranney <mjr@ranney.com>",
+    "keywords": ["riak", "database"],
     "repository": {
       "type": "git",
       "url": "http://github.com/mranney/node_riak.git"
     },
     "dependencies": {
          "poolee": "*"
-    }
+    },
+    "main": "./riak.js"
 }
