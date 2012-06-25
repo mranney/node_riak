@@ -188,6 +188,7 @@ function parse_multipart(res, str) {
 // Supported options and their default values
 // {
 //     r_val: <number> // default is whatever Riak's default is, usually basic quorum
+//     w_val: <number> // default is whatever Riak's default is, usually basic quorum
 //     retry: <bool>   // default = true, will retry gets with exponential backoff when recieving a 404
 //     parse: <bool>   // default = true, will parse riak response assuming it is json
 //     resolver: <fn>  // no default = used to resolve sibling values
@@ -202,6 +203,7 @@ function RiakRequest(client, bucket, key, options, callback) {
     this.callback_fn = callback;
     this.method = this.options.method;
     this.r_val = this.options.r_val || null;
+    this.w_val = this.options.w_val || null;
     this.return_body = this.options.return_body || null;
     this.should_parse = this.options.parse !== false;
     this.should_retry = this.options.retry !== false;
@@ -246,10 +248,13 @@ RiakRequest.prototype.callback = function (err, res, obj) {
 RiakRequest.prototype.do_request = function () {
     var self = this, qobj, qs = "", pool_options;
 
-    if (this.r_val || this.return_body) {
+    if (this.r_val || this.w_val || this.return_body) {
         qobj = {};
         if (this.r_val) {
             qobj.r = this.r_val;
+        }
+        if (this.w_val) {
+            qobj.w = this.w_val;
         }
         if (this.return_body) {
             qobj.returnbody = this.return_body;

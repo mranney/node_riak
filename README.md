@@ -41,10 +41,6 @@ Try running the example and you should see something like this:
 
 ---
 
-These docs are a work in progress. May not be 100% complete.
-
----
-
 ## Create a client
 
 ```js
@@ -103,7 +99,14 @@ The default `options` are
 var options = {
     http_headers: {},
     mime_types: [], // list of content-types. TODO: never referenced in the code?
-    return_body: false
+    return_body: false,
+
+    // more supported options:
+    // r_val: <number>, // default is whatever Riak's default is, usually basic quorum
+    // w_val: <number>, // default is whatever Riak's default is, usually basic quorum
+    // retry: <bool>,   // default = true, will retry gets with exponential backoff when recieving a 404
+    // parse: <bool>,   // default = true, will parse riak response assuming it is json
+    // resolver: <fn>,  // no default = used to resolve sibling values
 }
 client.get(bucket, key, options, callback)
 ```
