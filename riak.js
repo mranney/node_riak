@@ -107,13 +107,6 @@ RiakClient.prototype.retry_filter = function retry_filter(options, response, bod
         return true;
     }
 
-    // this works around a Riak restart condition where a precommit hook fails while the node is initializing.
-    if (options.method === "PUT" && response.statusCode === 403) {
-        this.warn("riak retry", log_str + " retrying PUT on 403 status");
-        this.counter("riak_retry_filter|403_PUT", 1);
-        return true;
-    }
-
     if (options.retry_not_found && options.method === "GET" && response.statusCode === 404) {
         if (!options.notFound) {
             options.notFound = 0;
@@ -123,8 +116,6 @@ RiakClient.prototype.retry_filter = function retry_filter(options, response, bod
             this.counter("riak_retry_filter|404_GET", 1);
             return true;
         }
-        // TODO - need an option to decide whether to log this.  Sometimes 404's are expected, but you still want retry, like for bodies
-        // log("riak retry", log_str + " giving up on 404");
         return false;
     }
 
@@ -607,7 +598,7 @@ RiakClient.prototype.post = function (url, post_body, callback) {
     });
 };
 
-// TODO - this is not longer used, so it might not work anymore.
+// TODO - this is no longer used, so it might not work anymore.
 RiakClient.prototype.solr = function (bucket, query, limit, callback) {
     var self = this;
 

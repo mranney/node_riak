@@ -9,6 +9,17 @@ there may be glaring holes in functionality that we don't use.
 It uses the "poolee" module to do load balancing and failure detection so you don't necessarily need a load balancer between node
 and Riak.
 
+The library has support for timing each request, resolving siblings, and conditional retry.
+
+## API
+
+### Constructor
+
+    var RiakClient = require("riak"), client;
+    client = new RiakClient(["host1:port1", "host2:port2", ... "hostn:portn"], "client_id", "pool_name");
+
+The `RiakClient` constructor takes a list of host:port pairs, each of which are equivalent nodes in a Riak cluster.
+
 ## Example
 
 There is no documentation yet, and there is only one example.  This is the best thing to look at for now.  You can run it, and you should see something like this:
