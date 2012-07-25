@@ -54,6 +54,7 @@ var RiakClient = require("riak");
 var servers = ["127.0.0.1:8098"]
 
 // should be unique, used by riak if you don't supply a vector clock
+// default value: random integer
 var client_id = "docs-client"
 
 // informative name for logging purposes etc
