@@ -32,8 +32,9 @@ function RiakClient(node_list, client_id, pool_name) {
         pool_name = "riak_user";
     }
 
-    if (! this.client_id) {
-        throw new Error("client_id must be specified");
+    if (!this.client_id) {
+        // client id needs to be unique
+        this.client_id = Math.floor(Math.random() * 4294967295);
     }
 
     this.pool = new LB_Pool(http, node_list, {
