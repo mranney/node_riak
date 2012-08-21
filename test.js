@@ -30,7 +30,7 @@ specify("put", function (assert) {
 });
 specify("returnbody", function (assert) {
     var bucket = "bucket_1",
-        key = "key_0",
+        key = "key_1",
         message = "some string full of juicy data",
         options = { return_body: true };
 
@@ -42,7 +42,7 @@ specify("returnbody", function (assert) {
 
 specify("get", function (assert) {
     var bucket = "bucket_1",
-        key = "key_0",
+        key = "key_2",
         message = "blah blah blah blah riak is cool blah blah",
         options = {};
 
@@ -61,7 +61,7 @@ specify("get", function (assert) {
 
 specify("modify", function (assert) {
     var bucket = "bucket_1",
-        key = "key_1",
+        key = "key_3",
         message = { counter: 0 },
         options = {};
 
@@ -72,7 +72,7 @@ specify("modify", function (assert) {
         // GET + PUT as modify()
         // This mutator function does a simple increment of obj.counter
         // with no error checking.
-        client.modify("bucket_1", "key_1", mutator, options, callback);
+        client.modify(bucket, key, mutator, options, callback);
 
     });
     function mutator(old, done) {
@@ -90,7 +90,7 @@ specify("modify", function (assert) {
 
 specify("replace", function (assert) {
     var bucket = "bucket_1",
-        key = "key_2",
+        key = "key_4",
         message = "OLD VAL",
         new_val = "NEW VAL",
         options = {};
@@ -109,6 +109,29 @@ specify("replace", function (assert) {
             assert.equal(obj2, new_val);
         });
     }
+});
+
+specify("append", function (assert) {
+    var bucket = "bucket_1",
+        key = "key_5",
+        message = [ 1, 2, 3, 4 ],
+        new_val = 5,
+        options = {};
+    client.put(bucket, key, message, options, function (err, res, obj) {
+        assert.ok(!err);
+        assert.equal(res.statusCode, 204);
+
+        client.append(bucket, key, new_val, options, function (err, res, obj) {
+            assert.ok(!err);
+            assert.equal(res.statusCode, 204);
+
+            client.get(bucket, key, options, function (err, res, obj2) {
+                assert.ok(!err);
+                assert.equal(res.statusCode, 200);
+                assert.deepEqual(obj, [1, 2, 3, 4, 5]);
+            });
+        });
+    });
 });
 
 specify.run(filters);
