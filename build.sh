@@ -1,0 +1,1 @@
+jshint ./*.js examples/*.js
