@@ -1,7 +1,7 @@
 {
   "name": "riak",
   "version": "1.0.3",
-  "description": "Riak client",
+  "description": "Riak client for node.js. Used in production by Voxer.com",
   "homepage": "http://github.com/mranney/node_riak",
   "author": "Matt Ranney <mjr@ranney.com>",
   "keywords": [
@@ -13,8 +13,11 @@
     "url": "http://github.com/mranney/node_riak.git"
   },
   "dependencies": {
-    "poolee": "*",
+    "poolee": "~0.3.0",
     "specify": "~1.0.0"
+  },
+  "scripts": {
+    "test": "node test.js"
   },
   "main": "./riak.js"
 }
