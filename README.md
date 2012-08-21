@@ -25,16 +25,16 @@ The `RiakClient` constructor takes a list of host:port pairs, each of which are 
 Try running the example and you should see something like this:
 
     ranney-imac:~/work/node_riak (master)$ curl -X DELETE localhost:8098/riak/bucket_1/key_1
-    ranney-imac:~/work/node_riak (master)$ node example.js 
+    ranney-imac:~/work/node_riak (master)$ node example.js
     metric: counter, riak_retry_filter|404_GET=1
     metric: histogram, LB_Pool_pool_name|GET|bucket_1=51
     metric: histogram, LB_Pool_pool_name|PUT|bucket_1=7
     204:  { counter: 1 }
-    ranney-imac:~/work/node_riak (master)$ node example.js 
+    ranney-imac:~/work/node_riak (master)$ node example.js
     metric: histogram, LB_Pool_pool_name|GET|bucket_1=9
     metric: histogram, LB_Pool_pool_name|PUT|bucket_1=5
     204:  { counter: 2 }
-    ranney-imac:~/work/node_riak (master)$ node example.js 
+    ranney-imac:~/work/node_riak (master)$ node example.js
     metric: histogram, LB_Pool_pool_name|GET|bucket_1=9
     metric: histogram, LB_Pool_pool_name|PUT|bucket_1=4
     204:  { counter: 3 }
@@ -76,7 +76,7 @@ metrics are collected.
 
 ```js
 client.on("metrics", function (type, key, val) {
-    // `type` is either "histogram" or "counter". 
+    // `type` is either "histogram" or "counter".
     // Information is gleaned from requests made by poolee, and tells you about
     // downed nodes, retries, and request duration.
     console.log("metric: " + type + ", " + key + "=" + val);
@@ -87,7 +87,7 @@ client.on("metrics", function (type, key, val) {
 
 `callback`: mandatory callback function, invoked ala `callback(error, response, object)`
 
-`options`: let caller specify http headers that riak may care about such as 
+`options`: let caller specify http headers that riak may care about such as
 X-Riak-Vclock and Content-Type.
 
 When `options.return_body = true`, it which will return the body and a status
@@ -100,16 +100,18 @@ The default `options` are
 
 ```js
 var options = {
-    http_headers: {}, 
+    http_headers: {},
     mime_types: [], // list of content-types. TODO: never referenced in the code?
     return_body: false
 }
 client.get(bucket, key, options, callback)
 ```
 
+### client.put(bucket, key, message, options, callback)
+
 ### client.replace(bucket, key, new_val, options, callback)
 
-### client.modify(bucket, key, mutator, options, callback) 
+### client.modify(bucket, key, mutator, options, callback)
 This mutator function does a simple increment of prop2 with no error checking.
 It does a GET and then a PUT with your modifications.
 
@@ -142,7 +144,7 @@ Internally it uses `client.modify` with a mutator function to accomplish this.
 ## Semi-deprecated / not in use / possibly not working
 ### client.solr(bucket, query, limit, callback)
 Make a request to riak with a url of the form
-    
+
     /solr/<bucket>/select?q=<query>&wt=json&rows=<limit>
 
 ## LICENSE - "MIT License"
