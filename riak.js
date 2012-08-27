@@ -604,6 +604,45 @@ RiakClient.prototype.post = function (url, post_body, callback) {
     });
 };
 
+RiakClient.prototype.index = function (bucket, index, begin_val, end_val, callback) {
+    var self = this;
+
+    if (this.debug_mode) {
+        this.log("riak index", bucket + ", " + index + ", " + begin_val + ", ", + end_val);
+    }
+
+    if (typeof callback !== "function") {
+        throw new Error("Callback passed non-function");
+    }
+
+    this.pool.get({
+        path: "/buckets/" + encodeURIComponent(bucket) +  "/index/" + encodeURIComponent(index) + "/" + encodeURIComponent(begin_val) + "/" + encodeURIComponent(end_val),
+        headers: {
+            "X-Riak-ClientId": this.client_id,
+            "Connection": "keep-alive"
+        }
+    }, function (err, res, body) {
+        if (err) {
+            return callback(err);
+        }
+        var obj = {};
+        if (body.length > 0 && res.statusCode === 200) {
+            try {
+                obj = JSON.parse(body);
+            } catch (json_err) {
+                console.warn("riak index JSON parse: " + body);
+                return callback(new Error("JSON parse error"));
+            }
+            return callback(null, res, obj);
+        } else {
+            if (self.debug_mode) {
+                self.log("riak index", bucket + ", " + index + " returned non-JSON, statusCode: " + res.statusCode + ", body:" + JSON.stringify(body));
+            }
+            return callback(null, res, {error: "non-JSON: " + body});
+        }
+    });
+};
+
 // TODO - this is no longer used, so it might not work anymore.
 RiakClient.prototype.solr = function (bucket, query, limit, callback) {
     var self = this;

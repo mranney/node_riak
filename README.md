@@ -143,6 +143,8 @@ Internally it uses `client.modify` with a mutator function to accomplish this.
 
 ### client.post(url, post_body, callback)
 
+### client.index(bucket, index, begin_val, end_val, callback)
+
 ---
 
 ## Semi-deprecated / not in use / possibly not working

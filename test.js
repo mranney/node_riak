@@ -134,4 +134,24 @@ specify("append", function (assert) {
     });
 });
 
+specify("index", function (assert) {
+    var bucket = "bucket_1",
+        key = "key_6",
+        message = "some string full of juicy data",
+		options = {"http_headers": {"x-riak-index-id_int": "1"}},
+		index = "id_int",
+		begin_val = "1",
+		end_val = "";
+	client.put(bucket, key, message, options, function (err, res, obj) {
+        assert.ok(!err);
+        assert.equal(res.statusCode, 204);
+
+		client.index(bucket, index, begin_val, end_val, function(err, res, obj) {
+			assert.ok(!err);
+			assert.equal(res.statusCode, 200);
+			assert.deepEqual(obj, {"keys": ["key_6"]});
+		});
+	});
+});
+
 specify.run(filters);
