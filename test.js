@@ -134,4 +134,30 @@ specify("append", function (assert) {
     });
 });
 
+specify("post", function (assert) {
+	
+	var bucket = "bucket_1",
+		key = "key_6",
+		options = {},
+		value = "value " + Math.random();
+	
+	client.post("/riak/" + bucket, JSON.stringify(value), function(err, res, obj) {
+	  
+	  assert.ok(!err);
+	  assert.ok(res.headers.location !== null);
+	  assert.equal(res.statusCode, 201);
+	  
+	  var uri = res.headers.location.split("/");
+	  id = uri[uri.length - 1];
+	  
+	  client.get(bucket, id, options, function(err, res, obj) {
+	    assert.ok(!err);
+	    assert.equal(res.statusCode, 200);
+	    assert.equal(obj, value);
+	  });
+	
+	});
+
+});
+
 specify.run(filters);
