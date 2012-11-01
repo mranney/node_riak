@@ -70,7 +70,7 @@ function RiakClient(node_list, client_id, pool_name) {
     });
 
     this.debug_mode = false;
-    
+
 }
 require("util").inherits(RiakClient, events.EventEmitter);
 
@@ -588,7 +588,9 @@ RiakClient.prototype.post = function (url, post_body, callback) {
             self.error("riak post err", inspect(err) + " url: " + url + " post_body: " + post_body);
             return callback(err);
         }
-        if (body.length > 0 && res.statusCode === 200) { // TODO - check the content-type header to see if this is actually JSON
+        // TODO it seems that a successful post returns no body instead of the
+        // blob you just stored.  So we always hit the else branch, woops!
+        if (body.length > 0 && (res.statusCode === 200 || res.statusCode === 201)) { // TODO - check the content-type header to see if this is actually JSON
             try {
                 obj = JSON.parse(body);
             } catch (json_err) {
