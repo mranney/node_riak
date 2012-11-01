@@ -82,6 +82,11 @@ client.on("metrics", function (type, key, val) {
 
 ### client.get(bucket, key, options, callback)
 
+`bucket`: which bucket you want to look in, "/riak/" is automatically prepended
+    for you (all the functions do this).
+
+`key`: the name of the thing you want
+
 `callback`: mandatory callback function, invoked ala `callback(error, response, object)`
 
 `options`: let caller specify http headers that riak may care about such as
@@ -112,6 +117,30 @@ client.get(bucket, key, options, callback)
 ```
 
 ### client.put(bucket, key, message, options, callback)
+
+### client.post(url, value, options, callback)
+Useful for inserting something when you don't care what the key is. Riak
+responds with a `location` header that tells you the key that was generated for
+you:
+
+```js
+var value = { riak: "is fun" }
+    bucket = "bucket_1",
+    url = "/riak/" + bucket,
+    options = {};
+
+client.post(url, JSON.stringify(value), function(err, res, obj) {
+    assert.ok(!err);
+    assert.ok(res.headers.location !== null);
+
+    var uri = res.headers.location.split("/"),
+        key = uri[uri.length - 1];
+
+    client.get(bucket, key, options, function(err, res, obj) {
+        assert.deepEqual(obj, value);
+    });
+});
+```
 
 ### client.replace(bucket, key, new_val, options, callback)
 
