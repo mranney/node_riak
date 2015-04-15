@@ -1,6 +1,8 @@
 Riak - a node.js riak client
 ===
 
+[![Join the chat at https://gitter.im/mranney/node_riak](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mranney/node_riak?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 This is the client that we use at Voxer.  It's been tested very thoroughly in
 our environment and for our usage patterns, but there may be glaring holes in
 functionality that we don't use.
